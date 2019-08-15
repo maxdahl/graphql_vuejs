@@ -1,0 +1,15 @@
+{
+  "name": "00_graphql-vuejs",
+  "version": "1.0.0",
+  "description": "example application for using graphql with vuejs and express",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "concurrently": "^4.1.1"
+  }
+}
