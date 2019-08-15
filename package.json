@@ -4,6 +4,7 @@
   "description": "example application for using graphql with vuejs and express",
   "main": "index.js",
   "scripts": {
+    "dev": "concurrently \"cd ./frontend && npm run dev\" \"cd ./backend && nodemon -e js,graphql --exec babel-node src/index.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
