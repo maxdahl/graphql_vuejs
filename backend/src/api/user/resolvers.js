@@ -3,7 +3,8 @@ import bcrypt from "bcrypt";
 export default {
   Query: {
     async getUser(parent, args, ctx, info) {
-      return null;
+      if (!ctx.request.session.user) throw new Error("not authorized");
+      return ctx.request.session.user;
     }
   },
 

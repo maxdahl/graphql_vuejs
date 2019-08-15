@@ -32,18 +32,12 @@ const server = new GraphQLServer({
 });
 
 import helmet from "helmet";
-import cors from "cors";
 import session from "express-session";
 import { szeTime } from "szeutils";
 
 const MongoStore = require("connect-mongo")(session);
 
 server.express.use(helmet());
-server.express.use(
-  cors({
-    credentials: true
-  })
-);
 
 server.express.use(
   session({
@@ -58,9 +52,15 @@ server.express.use(
     secure: process.env.USE_HTTPS
   })
 );
-
+console.log(process.env.CORS_URI);
 const startServer = async () => {
-  await server.start({ port: process.env.PORT });
+  await server.start({
+    port: process.env.PORT,
+    cors: {
+      origin: process.env.CORS_URI,
+      credentials: true
+    }
+  });
   console.log(`Server is running on port ${process.env.PORT}`);
 };
 
