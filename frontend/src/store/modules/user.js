@@ -20,12 +20,16 @@ const getters = {
 const mutations = {
   [types.LOGIN](state, payload) {
     state.user = { ...payload, isLoggedIn: true };
+  },
+
+  [types.LOGOUT](state) {
+    state.user = { isLoggedIn: false };
   }
 };
 
 const actions = {
   [types.LOGIN]({ commit }, { email, password }) {
-    return apollo.defaultClient
+    return apollo
       .mutate({
         mutation: queries.LOGIN,
         variables: {
@@ -38,13 +42,38 @@ const actions = {
       });
   },
 
+  [types.LOGOUT]({ commit }) {
+    return apollo
+      .mutate({
+        mutation: queries.LOGOUT
+      })
+      .then(() => {
+        commit(types.LOGOUT);
+        apollo.clearStore();
+      });
+  },
+
   [types.GET_USER]({ commit }) {
-    return apollo.defaultClient
+    return apollo
       .query({
         query: queries.GET_USER
       })
       .then(resp => {
-        commit(types.LOGIN, resp.data.getUser);
+        commit(types.LOGIN, resp.data.user);
+      });
+  },
+
+  [types.UPDATE_USER]({ commit }, { id, data }) {
+    return apollo
+      .mutate({
+        mutation: queries.UPDATE_USER,
+        variables: {
+          id,
+          data
+        }
+      })
+      .then(resp => {
+        commit(types.LOGIN, resp.data.user);
       });
   }
 };

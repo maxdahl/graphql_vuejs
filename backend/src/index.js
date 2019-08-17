@@ -45,14 +45,14 @@ server.express.use(
       maxAge: szeTime.toMs({ h: 1 })
     },
     resave: false,
-    name: "sessioncookie",
+    name: process.env.SESSION_COOKIE_NAME,
     secret: process.env.SESSION_SECRECT,
     saveUninitialized: false,
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
     secure: process.env.USE_HTTPS
   })
 );
-console.log(process.env.CORS_URI);
+
 const startServer = async () => {
   await server.start({
     port: process.env.PORT,

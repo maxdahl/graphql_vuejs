@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 export default {
   Query: {
     async getUser(parent, args, ctx, info) {
-      if (!ctx.request.session.user) throw new Error("not authorized");
+      if (!ctx.request.session.user) throw new Error("NOAUTH");
       return ctx.request.session.user;
     }
   },
@@ -21,7 +21,9 @@ export default {
     },
 
     async updateUser(parent, args, ctx, info) {
-      return null;
+      if (!ctx.request.session.user) throw new Error("NOAUTH");
+      console.log(args);
+      return ctx.request.session.user;
     },
 
     async login(parent, args, ctx, info) {
@@ -36,6 +38,12 @@ export default {
 
       ctx.request.session.user = user;
       return user;
+    },
+
+    async logout(parent, args, ctx, info) {
+      await ctx.request.session.destroy();
+      ctx.response.clearCookie(process.env.SESSION_COOKIE_NAME);
+      return true;
     }
   }
 };

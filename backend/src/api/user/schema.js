@@ -14,11 +14,12 @@ export default `
     createUser(username: String!, email: String!, password: String!): User!
     updateUser(id: ID!, data: UpdateUserInput!): User!
     login(email: String!, password: String!): User!
+    logout: Boolean
   }
 
   input UpdateUserInput {
     email: String
     username: String
-    password: String
+    password: String 
   }
 `;

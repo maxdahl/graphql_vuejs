@@ -1,48 +1,28 @@
 import Vue from "vue";
 import App from "./App.vue";
-import apolloProvider from "./vue-apollo";
+import babelPolyfill from "babel-polyfill";
 import BootstrapVue from "bootstrap-vue";
 
 Vue.use(BootstrapVue);
 
-import VueRouter from "vue-router";
-import { routes } from "./routes";
+import store from "./store";
+import { GET_USER } from "./store/types";
+import router from "./router";
 
-Vue.use(VueRouter);
-const router = new VueRouter({
-  routes,
-  mode: "history"
-});
+const createVue = () => {
+  new Vue({
+    el: "#app",
+    router,
+    store,
+    render: h => h(App)
+  });
+};
 
-import { store } from "./store";
-import * as types from "./store/types";
-
-router.beforeEach((to, from, next) => {
-  const user = store.getters[types.USER];
-
-  if (!user.isLoggedIn) {
-    store
-      .dispatch(types.GET_USER)
-      .then(() => {
-        if (to.meta.redirectLoggedIn) {
-          router.push("/");
-        } else next();
-      })
-      .catch(err => {
-        if (to.meta.redirectLoggedIn) next();
-        else router.push({ name: "login" });
-      });
-  } else {
-    if (to.meta.redirectLoggedIn) {
-      router.push("/");
-    } else next();
-  }
-});
-
-new Vue({
-  el: "#app",
-  router,
-  store,
-  apolloProvider,
-  render: h => h(App)
-});
+store
+  .dispatch(GET_USER)
+  .then(() => {
+    createVue();
+  })
+  .catch(err => {
+    createVue();
+  });

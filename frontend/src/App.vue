@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <app-header />
     <!-- <div v-if="user != null">
       <router-link :to="{name: 'home'}">Home</router-link>
     </div>
@@ -12,7 +13,12 @@
 </template>
 
 <script>
-export default {};
+import Header from "./components/header";
+export default {
+  components: {
+    appHeader: Header
+  }
+};
 </script>
 
 <style>
